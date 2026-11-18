@@ -135,7 +135,12 @@ export function PriceBarChartComponent(
     Math.min(min, ticks[0] ?? min),
     Math.max(max, ticks[ticks.length - 1] ?? max),
   ];
-  const left = MARGIN.left;
+  const fmt = (v: number): string => formatValue(v, format);
+  // Room for the widest y label ("1.50 kr/kWh"), at about 6.5 px per character of 11 px text.
+  const left = Math.max(
+    MARGIN.left,
+    Math.ceil(Math.max(...ticks.map((t) => fmt(t).length)) * 6.5) + 10,
+  );
   const right = width - MARGIN.right;
   const top = MARGIN.top;
   const bottom = plotHeight - MARGIN.bottom;
@@ -149,7 +154,6 @@ export function PriceBarChartComponent(
   const grid = theme.palette.divider;
   const columnFill = theme.palette.text.primary;
   const averageColor = theme.palette.text.secondary;
-  const fmt = (v: number): string => formatValue(v, format);
 
   const onMove = (e: MouseEvent<SVGRectElement>): void => {
     const box = (

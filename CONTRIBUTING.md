@@ -31,7 +31,8 @@ version in step with the Perses version the plugin targets.
 
 ## Try it in Perses
 
-`npm run dev` serves the plugin for `percli plugin start` against a running Perses. To test the
+The quickest check is the `dev/` stack (see "Try it locally" in the README); it is also where the
+README screenshots come from. `npm run dev` serves the plugin for `percli plugin start` against a running Perses. To test the
 packaged archive instead, put `PriceBars-<version>.tar.gz` in a directory listed in
 `plugin.archive_paths` (see the README) and restart Perses.
 

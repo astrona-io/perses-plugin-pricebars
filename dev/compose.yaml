@@ -1,0 +1,31 @@
+# A local Perses with the plugin and made-up hourly electricity prices around now.
+# See "Try it locally" in README.md.
+name: perses-plugin-pricebars
+
+services:
+  # Serves elpris_hour_dkk_per_kwh{start}: the last 12 hours and the next 33.
+  fake-metrics:
+    image: docker.io/library/python:3.13-alpine
+    command: ["python", "-I", "/app/fake_metrics.py"]
+    environment:
+      # The start labels are local time; match the browser's zone (POSIX TZ, no tzdata needed).
+      TZ: ${PRICES_TZ:-CET-1CEST,M3.5.0,M10.5.0/3}
+    volumes:
+      - ./fake_metrics.py:/app/fake_metrics.py:ro,z
+
+  prometheus:
+    image: docker.io/prom/prometheus:v3.5.0
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro,z
+
+  perses:
+    image: docker.io/persesdev/perses:v0.55.1
+    command: ["--config", "/etc/perses/config.yaml"]
+    ports:
+      - "127.0.0.1:${PERSES_PORT:-18082}:8080"
+    volumes:
+      - ./perses.yaml:/etc/perses/config.yaml:ro,z
+      - ./provisioning:/etc/perses/provisioning:ro,z
+      # Holds PriceBars-<version>.tar.gz from `percli plugin build`.
+      - ./archive:/etc/perses/plugins-archive-pricebars:ro,z
+    depends_on: [prometheus]

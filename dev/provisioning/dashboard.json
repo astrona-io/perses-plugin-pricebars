@@ -1,0 +1,70 @@
+{
+  "kind": "Dashboard",
+  "metadata": {
+    "name": "prices",
+    "project": "demo"
+  },
+  "spec": {
+    "display": {
+      "name": "Electricity prices"
+    },
+    "duration": "1h",
+    "refreshInterval": "1m",
+    "variables": [],
+    "panels": {
+      "prices": {
+        "kind": "Panel",
+        "spec": {
+          "display": {
+            "name": "Prices, last 12 hours and ahead, incl. VAT (DKK/kWh)",
+            "description": "One bar per hour, coloured against the average of the shown hours."
+          },
+          "plugin": {
+            "kind": "PriceBarChart",
+            "spec": {
+              "format": {
+                "unit": "decimal",
+                "decimalPlaces": 2,
+                "customLabel": "kr/kWh"
+              },
+              "legend": {
+                "position": "bottom"
+              }
+            }
+          },
+          "queries": [
+            {
+              "kind": "TimeSeriesQuery",
+              "spec": {
+                "plugin": {
+                  "kind": "PrometheusTimeSeriesQuery",
+                  "spec": {
+                    "query": "sum by (start) (elpris_hour_dkk_per_kwh @ end()) * 1.25"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layouts": [
+      {
+        "kind": "Grid",
+        "spec": {
+          "items": [
+            {
+              "x": 0,
+              "y": 0,
+              "width": 24,
+              "height": 10,
+              "content": {
+                "$ref": "#/spec/panels/prices"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

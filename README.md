@@ -10,6 +10,11 @@ where are we now?"
 sum by (start) (elpris_hour_dkk_per_kwh @ end()) * 1.25
 ```
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/price-bars-dark.png">
+  <img alt="Hourly electricity prices over a day and a half, bars coloured blue, green, yellow and red against a dashed average line at 1.79 kr/kWh, with the current hour drawn darker" src="docs/images/price-bars-light.png">
+</picture>
+
 ## Supported versions
 
 | Plugin | Perses  | Status              |
@@ -26,6 +31,12 @@ sum by (start) (elpris_hour_dkk_per_kwh @ end()) * 1.25
 - **Average line.** A dashed line at the average. It does not react to the mouse; the average shows
   in the legend and in every bar's tooltip, with how much that hour saves or costs against
   it ("−25 % vs average, saves 25 %").
+
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/images/price-bars-tooltip-dark.png">
+    <img alt="Tooltip on the 19:00 bar: high, 2.92 kr/kWh, average 1.79 kr/kWh, +63 % vs average, costs 63 % more" src="docs/images/price-bars-tooltip-light.png">
+  </picture>
+
 - **Current hour.** When the category is a local time (`YYYY-MM-DD HH:mm`), the bar whose hour holds
   the viewer's current time is drawn darker on a light background column. The hovered bar gets a
   fainter column of the same kind.
@@ -49,6 +60,21 @@ spec:
 ```
 
 The schema is `schemas/panels/price-bar-chart/price-bar-chart.cue`.
+
+## Try it locally
+
+`dev/` runs Perses with the plugin, a Prometheus, and a made-up price generator that serves
+`elpris_hour_dkk_per_kwh` for 12 hours back and 33 hours ahead, with a cheap night, a morning and an
+evening peak. The screenshots above come from it. It needs `podman compose` or `docker compose`.
+
+```bash
+npm ci && npm run build && percli plugin build
+cp PriceBars-*.tar.gz dev/archive/
+podman compose -f dev/compose.yaml up -d    # PERSES_PORT=... to move it off 18082
+```
+
+Open <http://localhost:18082/projects/demo/dashboards/prices>; the bars show after the first scrape,
+about 15 seconds. `podman compose -f dev/compose.yaml down` removes it again.
 
 ## Install into Perses
 
