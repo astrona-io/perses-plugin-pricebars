@@ -1,0 +1,16 @@
+{
+  "kind": "PriceBarChart",
+  "spec": {
+    "categoryLabel": "start",
+    "bands": [
+      { "upTo": 75, "color": "#3274d9", "label": "very cheap" },
+      { "upTo": 100, "color": "#2e9e4f", "label": "under average" },
+      { "upTo": 115, "color": "#e0b400", "label": "over average" },
+      { "color": "#c8372d", "label": "high" }
+    ],
+    "average": { "show": true, "label": "average" },
+    "highlightCurrent": true,
+    "format": { "unit": "decimal", "decimalPlaces": 2 },
+    "legend": { "position": "bottom" }
+  }
+}
