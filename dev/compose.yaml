@@ -5,7 +5,7 @@ name: perses-plugin-pricebars
 services:
   # Serves elpris_hour_dkk_per_kwh{start}: the last 12 hours and the next 33.
   fake-metrics:
-    image: docker.io/library/python:3.13-alpine
+    image: docker.io/library/python:3.15-alpine
     command: ["python", "-I", "/app/fake_metrics.py"]
     environment:
       # The start labels are local time; match the browser's zone (POSIX TZ, no tzdata needed).
